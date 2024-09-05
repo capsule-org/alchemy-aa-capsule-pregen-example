@@ -7,8 +7,8 @@
 
     /* Module system: */
     "esModuleInterop": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
 
     /* Import options: */
     "allowJs": true, //Allow import .js
