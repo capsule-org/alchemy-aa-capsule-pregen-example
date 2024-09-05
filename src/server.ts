@@ -23,6 +23,18 @@ const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY
 
 app.use(express.json())
 
+// Mock functions for database operations
+async function storeUserShare(email: string, userShare: string) {
+  // TODO: Implement actual database storage
+  console.log(`Storing user share for ${email}`)
+}
+
+async function getUserShareFromDatabase(email: string): Promise<string | null> {
+  // TODO: Implement actual database retrieval
+  console.log(`Retrieving user share for ${email}`)
+  return null // Simulate no stored share for now
+}
+
 app.post("/", async (req: Request, res: Response) => {
   console.log("POST request received")
   try {
@@ -44,6 +56,8 @@ app.post("/", async (req: Request, res: Response) => {
       PregenIdentifierType.EMAIL
     )
     let pregenWallet
+    let userShare: string
+
     if (!hasWallet) {
       console.log("Creating new wallet")
       pregenWallet = await capsule.createWalletPreGen(
@@ -51,8 +65,16 @@ app.post("/", async (req: Request, res: Response) => {
         email,
         PregenIdentifierType.EMAIL
       )
+      userShare = (await capsule.getUserShare()) ?? ""
+
+      await storeUserShare(email, userShare)
     } else {
       console.log("Retrieving existing wallet")
+      userShare = (await getUserShareFromDatabase(email)) ?? ""
+      if (!userShare) {
+        throw new Error("User share not found for existing wallet")
+      }
+      await capsule.setUserShare(userShare)
       const wallets = await capsule.getPregenWallets(
         email,
         PregenIdentifierType.EMAIL
@@ -61,9 +83,6 @@ app.post("/", async (req: Request, res: Response) => {
     }
     console.log(`Wallet ID: ${pregenWallet.id}`)
 
-    console.log("Setting user share")
-    const userShare = await capsule.getUserShare()
-    await capsule.setUserShare(userShare)
     const capsuleAccount = createCapsuleAccount(capsule)
 
     // 2. Create client
