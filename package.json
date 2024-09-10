@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts  --trace-uncaught",
     "start": "node ./dist/server.js",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "lint": "eslint ./src",
@@ -30,10 +30,10 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
     "@alchemy/aa-alchemy": "3.19.0",
     "@usecapsule/server-sdk": "1.23.0-dev.1",
-    "@usecapsule/viem-v2-integration": "1.22.0-dev.1"
+    "@usecapsule/viem-v2-integration": "1.22.0-dev.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
   }
 }

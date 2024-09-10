@@ -4,7 +4,7 @@
     "skipLibCheck": true, //Skip node_modules type checking
     "target": "es2022", //Compile target
     "lib": ["es2022"], //Tell TypeScript what built-in types to include
-
+    "types": ["node"], //Tell TypeScript what types to include
     /* Module system: */
     "esModuleInterop": true,
     "module": "CommonJS",
