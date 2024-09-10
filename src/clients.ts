@@ -3,6 +3,8 @@ import {
   WalletType,
   PregenIdentifierType,
   Wallet,
+  hexStringToBase64,
+  SuccessfulSignatureRes,
 } from "@usecapsule/server-sdk"
 import {
   createCapsuleViemClient,
@@ -14,7 +16,14 @@ import {
   arbitrumSepolia,
   LocalAccountSigner,
 } from "@alchemy/aa-core"
-import { http, WalletClientConfig, WalletClient } from "viem"
+import {
+  http,
+  WalletClientConfig,
+  WalletClient,
+  SignableMessage,
+  Hash,
+  hashMessage,
+} from "viem"
 import {
   CAPSULE_API_KEY,
   CAPSULE_ENVIRONMENT,
@@ -62,6 +71,17 @@ export async function createOrGetPregenWallet(
 }
 
 export function createViemClient(capsule: Capsule): WalletClient {
+  const viemCapsuleAccount = createCapsuleAccount(capsule)
+
+  // This is a workaround to fix the v value of the signature on signMessage. This method overrides the default signMessage method with a custom implementation. See the customSignMessage function below.
+  viemCapsuleAccount.signMessage = async ({
+    message,
+  }: {
+    message: SignableMessage
+  }): Promise<Hash> => {
+    return customSignMessage(capsule, message)
+  }
+
   const walletClientConfig: WalletClientConfig = {
     chain: arbitrumSepolia,
     transport: http(ALCHEMY_RPC_URL),
@@ -75,27 +95,39 @@ export function createViemClient(capsule: Capsule): WalletClient {
 export async function createAlchemyClient(viemClient: WalletClient) {
   const walletClientSigner: WalletClientSigner = new WalletClientSigner(
     viemClient,
-    "capsule" // signerType
+    "capsule"
   )
 
   const client = await createModularAccountAlchemyClient({
     apiKey: ALCHEMY_API_KEY,
     chain: arbitrumSepolia,
     signer: walletClientSigner,
-    // signer: LocalAccountSigner.privateKeyToAccountSigner(`0x${PRIVATE_KEY}`),
     gasManagerConfig: {
       policyId: ALCHEMY_GAS_POLICY_ID,
     },
   })
 
-  const isDeployed = await client.account.isAccountDeployed()
-  console.log("Is account deployed:", isDeployed)
-
-  const initCode = isDeployed ? "0x" : await client.account.getInitCode()
-  console.log("InitCode:", initCode)
-
-  const nonce = isDeployed ? await client.account.getNonce() : 0n
-  console.log("Nonce:", nonce.toString())
-
   return client
+}
+
+async function customSignMessage(
+  capsule: Capsule,
+  message: SignableMessage
+): Promise<Hash> {
+  const hashedMessage = hashMessage(message)
+  const res = await capsule.signMessage(
+    Object.values(capsule.wallets!)[0]!.id,
+    hexStringToBase64(hashedMessage)
+  )
+
+  let signature = (res as SuccessfulSignatureRes).signature
+
+  // Fix the v value of the signature
+  const lastByte = parseInt(signature.slice(-2), 16)
+  if (lastByte < 27) {
+    const adjustedV = (lastByte + 27).toString(16).padStart(2, "0")
+    signature = signature.slice(0, -2) + adjustedV
+  }
+
+  return `0x${signature}`
 }
