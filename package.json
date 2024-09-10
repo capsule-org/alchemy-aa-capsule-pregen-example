@@ -35,5 +35,6 @@
     "@usecapsule/viem-v2-integration": "1.22.0-dev.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
