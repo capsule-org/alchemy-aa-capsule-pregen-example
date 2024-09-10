@@ -1,4 +1,4 @@
-# Alchemy AA + Capsule PreGen
+# Alchemy AA + Capsule PreGen Example
 
 This example demonstrates how to create and use Capsule's PreGen wallet on a server with Alchemy's AA libraries.
 
