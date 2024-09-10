@@ -11,11 +11,7 @@ import {
   createCapsuleAccount,
 } from "@usecapsule/viem-v2-integration"
 import { createModularAccountAlchemyClient } from "@alchemy/aa-alchemy"
-import {
-  WalletClientSigner,
-  arbitrumSepolia,
-  LocalAccountSigner,
-} from "@alchemy/aa-core"
+import { WalletClientSigner, arbitrumSepolia } from "@alchemy/aa-core"
 import {
   http,
   WalletClientConfig,
@@ -30,7 +26,6 @@ import {
   ALCHEMY_RPC_URL,
   ALCHEMY_API_KEY,
   ALCHEMY_GAS_POLICY_ID,
-  PRIVATE_KEY,
 } from "./constants"
 import { getUserShareFromDatabase, storeUserShare } from "./database"
 

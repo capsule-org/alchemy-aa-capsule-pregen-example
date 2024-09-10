@@ -29,7 +29,3 @@ export const EXAMPLE_CONTRACT_ADDRESS =
 
 export const EXAMPLE_CONTRACT_ABI =
   Example["contracts"]["contracts/Example.sol:Example"]["abi"]
-
-export const MESSAGE_TO_SIGN = "Hello, world!"
-
-export const PRIVATE_KEY = getEnvVariable("PRIVATE_KEY")

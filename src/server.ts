@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from "express"
 import {
   EXAMPLE_CONTRACT_ABI,
   EXAMPLE_CONTRACT_ADDRESS,
-  MESSAGE_TO_SIGN,
   PORT,
 } from "./constants"
 import {
