@@ -68,21 +68,21 @@ export async function createOrGetPregenWallet(
 export function createViemClient(capsule: Capsule): WalletClient {
   const viemCapsuleAccount = createCapsuleAccount(capsule)
 
-  // This is a workaround to fix the v value of the signature on signMessage. This method overrides the default signMessage method with a custom implementation. See the customSignMessage function below.
-  viemCapsuleAccount.signMessage = async ({
-    message,
-  }: {
-    message: SignableMessage
-  }): Promise<Hash> => {
-    return customSignMessage(capsule, message)
-  }
-
   const walletClientConfig: WalletClientConfig = {
     chain: arbitrumSepolia,
     transport: http(ALCHEMY_RPC_URL),
   }
 
   const viemClient = createCapsuleViemClient(capsule, walletClientConfig)
+
+  // This is a workaround to fix the v value of the signature on signMessage. This method overrides the default signMessage method with a custom implementation. See the customSignMessage function below.
+  viemClient.signMessage = async ({
+    message,
+  }: {
+    message: SignableMessage
+  }): Promise<Hash> => {
+    return customSignMessage(capsule, message)
+  }
 
   return viemClient
 }
