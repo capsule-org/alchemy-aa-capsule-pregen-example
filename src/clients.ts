@@ -69,6 +69,7 @@ export function createViemClient(capsule: Capsule): WalletClient {
   const viemCapsuleAccount = createCapsuleAccount(capsule)
 
   const walletClientConfig: WalletClientConfig = {
+    account: viemCapsuleAccount,
     chain: arbitrumSepolia,
     transport: http(ALCHEMY_RPC_URL),
   }
