@@ -1,6 +1,6 @@
 # Alchemy AA + Capsule PreGen Example
 
-This example demonstrates how to create and use Capsule's PreGen wallet on a server with Alchemy's AA libraries.
+This example demonstrates how to create and use Capsule's Pregenerated wallets on a server with Alchemy's AA libraries.
 
 ## Overview
 
@@ -16,9 +16,9 @@ When a POST message is received on the root path, the example will create or ret
 
 ### Wallet Shares
 
-For this simple example, we store the userShare string in a JSON file. However, best practice is to store this securely in a database.
+For this simple example, the `userShare` string is stored in a JSON file. However, best practice is to store this securely in a database.
 
-> **Warning:** The wallet share is sensitive content encoded in base64. We recommend encrypting it before storing, following best practices.
+> **Warning:** The wallet share is sensitive content encoded in base64. We recommend encrypting it before storing, [following best practices](https://docs.usecapsule.com/integration-guides/wallet-pregeneration#storing-and-managing-user-share).
 
 ### Custom Sign Message
 
