@@ -1,3 +1,8 @@
+# ARCHIVED
+
+Please refer to the latest examples on the
+[Capsule Docs Examples Hub](https://docs.usecapsule.com/getting-started/examples)
+
 # Alchemy AA + Capsule PreGen Example
 
 This example demonstrates how to create and use Capsule's Pregenerated wallets on a server with Alchemy's AA libraries.
